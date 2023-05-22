@@ -52,18 +52,15 @@ class Geolookup(Report):
 			return coor_dicc,coor_dicc[str(ip)]
 
 		def run(self, resultados: dict):
-			#try:
-				#r_path = str(self.analysis_path)+  "/logs/eve.json"
+			try:
 				coor_dicc = {}
 				r_path = os.path.join(self.analysis_path, "logs/eve.json")
-				#print(r_path)
 				with open(r_path, 'r') as f:
 					data = f.readlines()  # Leer el archivo y dividirlo en una lista de líneas
 				result = []
 				for line in data:
 					obj = json.loads(line.strip())  # Convertir cada línea en un diccionario de Python
 					# ID del analisis
-					#print(os.path.join(self.analysis_path))
 					obj["analysis_id"] = resultados["info"]["id"]
 					if "src_ip" in obj:
 						if int(obj["src_ip"].split(".")[0])!=192:
@@ -75,12 +72,10 @@ class Geolookup(Report):
 						else:
 							obj["geo_dst"] = [-0.87,41.65]
 						result.append(obj)  # Agregar el objeto modificado a la lista de resultados
-				#w_path = str(self.reports_path) + "/geoloc.json"
 				w_path = os.path.join(self.reports_path, "georeport.json")
-				#print(w_path)
 				with open(w_path, 'w') as f:
 					for obj in result:
 						f.write(json.dumps(obj) + '\n')  # Escribir cada objeto en el archivo de salida, separado por 					
-			#except (UnicodeError, TypeError, IOError) as e:
-			#	raise CuckooReportError("Geolookup Report Failed: %s" % e)
+			except (UnicodeError, TypeError, IOError) as e:
+				raise CuckooReportError("Geolookup Report Failed: %s" % e)
         
