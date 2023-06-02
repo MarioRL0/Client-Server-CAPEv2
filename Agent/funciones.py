@@ -36,7 +36,7 @@ def wait_download(file_name,monitor_dir,len_compare):
 	@return: nombre del fichero mas reciente, orden de upload
 	'''  
 	upload = True
-	while file_name[-5:] == ".part":
+	while file_name[-5:] == ".part" or file_name[-11:] == ".crdownload" or file_name[-4:] == ".tmp":
 		print("Identifica .part")
 		time.sleep(2)
 		file_list_aux = list_directory(monitor_dir,False)

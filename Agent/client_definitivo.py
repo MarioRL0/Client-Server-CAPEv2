@@ -1,7 +1,7 @@
 import socket 
 import hashlib
 import time
-import pysftp 
+import pysftp
 from vt_warning import vt_window
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import serialization,hashes
@@ -80,7 +80,10 @@ def sftp_transfer(_file,host,_port,user,_password):
 	@param user: Usuario SSH
 	@param _password: Pass SSH
 	''' 
-	with pysftp.Connection(host, port=_port, username=user, password=_password) as sftp:
+	cnopts = pysftp.CnOpts()
+	cnopts.hostkeys = None
+
+	with pysftp.Connection(host, port=_port, username=user, password=_password, cnopts=cnopts) as sftp:
 		with sftp.cd("."):
 			sftp.put(_file)
 
@@ -128,7 +131,7 @@ def send_CAPE(CAPE_ip,CAPE_port,tx_file):
 	user = sftp_credentials.split(":")[0]
 	_pass = sftp_credentials.split(":")[1]
 	# Realiza transferencia de archivo
-	sftp_transfer(tx_file,"192.168.153.5",22,user,_pass)
+	sftp_transfer(tx_file,"192.168.100.52",2205,user,_pass)
 	# Se manda ACK para que el server procese el archivo
 	s.send(b'ACK')
 	# El host de CAPE nos envia un check con la comprobacion
